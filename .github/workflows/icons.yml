@@ -1,0 +1,92 @@
+name: make-app-icons
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Make icons and manifest
+        run: |
+          python3 - <<'PY'
+          import json
+          import struct
+          import zlib
+
+          def make_png(size, path):
+              bg = (0, 0, 0)
+              fg = (181, 242, 106)
+              pts = [(0.18, 0.68), (0.38, 0.48), (0.52, 0.60), (0.80, 0.28)]
+              w = 0.045
+
+              def dist(px, py, a, b):
+                  ax, ay = a
+                  bx, by = b
+                  dx, dy = bx - ax, by - ay
+                  t = max(0, min(1, ((px - ax) * dx + (py - ay) * dy) / (dx * dx + dy * dy)))
+                  cx, cy = ax + t * dx, ay + t * dy
+                  return ((px - cx) ** 2 + (py - cy) ** 2) ** 0.5
+
+              rows = []
+              for y in range(size):
+                  row = bytearray([0])
+                  for x in range(size):
+                      px, py = x / size, y / size
+                      d = min(dist(px, py, pts[i], pts[i + 1]) for i in range(len(pts) - 1))
+                      row += bytes(fg if d < w else bg)
+                  rows.append(bytes(row))
+              raw = b"".join(rows)
+
+              def chunk(tag, data):
+                  c = struct.pack(">I", len(data)) + tag + data
+                  return c + struct.pack(">I", zlib.crc32(tag + data) & 0xffffffff)
+
+              png = (b"\x89PNG\r\n\x1a\n"
+                     + chunk(b"IHDR", struct.pack(">IIBBBBB", size, size, 8, 2, 0, 0, 0))
+                     + chunk(b"IDAT", zlib.compress(raw, 9))
+                     + chunk(b"IEND", b""))
+              with open(path, "wb") as f:
+                  f.write(png)
+
+          make_png(192, "icon-192.png")
+          make_png(512, "icon-512.png")
+
+          manifest = {
+              "name": "Stock Watchlist",
+              "short_name": "Stock",
+              "start_url": "./",
+              "scope": "./",
+              "display": "standalone",
+              "background_color": "#000000",
+              "theme_color": "#000000",
+              "icons": [
+                  {"src": "icon-192.png", "sizes": "192x192", "type": "image/png"},
+                  {"src": "icon-512.png", "sizes": "512x512", "type": "image/png"},
+              ],
+          }
+          with open("manifest.json", "w", encoding="utf-8") as f:
+              json.dump(manifest, f, indent=2)
+
+          p = "index.html"
+          s = open(p, encoding="utf-8").read()
+          if 'rel="manifest"' not in s:
+              tags = ('<title>Stock</title>\n'
+                      '<link rel="manifest" href="manifest.json">\n'
+                      '<link rel="icon" href="icon-192.png">\n'
+                      '<link rel="apple-touch-icon" href="icon-192.png">')
+              s = s.replace("<title>Stock</title>", tags, 1)
+              with open(p, "w", encoding="utf-8") as f:
+                  f.write(s)
+          PY
+      - name: Save files
+        run: |
+          git config user.name "price-bot"
+          git config user.email "price-bot@users.noreply.github.com"
+          git add icon-192.png icon-512.png manifest.json index.html
+          git diff --cached --quiet || git commit -m "add app icons"
+          git push
