@@ -48,6 +48,8 @@
     margin-bottom: 10px; color: var(--muted); font-weight: 500;
   }
   header.old #stamp { color: var(--warn); }
+  .tools { display: flex; align-items: center; gap: 8px; }
+  #sort { font-size: 14px; }
   button {
     font: inherit; color: var(--fg); background: transparent; cursor: pointer;
     border: 1px solid var(--box); border-radius: 6px; padding: 2px 10px;
@@ -90,7 +92,10 @@
 <body>
 <header id="top">
   <span id="stamp">กำลังโหลด…</span>
-  <button id="refresh" type="button" aria-label="รีเฟรชราคา">↻</button>
+  <span class="tools">
+    <button id="sort" type="button"></button>
+    <button id="refresh" type="button" aria-label="รีเฟรชราคา">↻</button>
+  </span>
 </header>
 <main id="grid"></main>
 <p id="note"></p>
@@ -130,6 +135,30 @@
     return td;
   }
 
+  var tickersCache = null;
+  var pricesCache = null;
+  var sortMode = "custom"; // "custom" = ตามลำดับใน tickers.json, "pct" = ตาม % เปลี่ยน มากไปน้อย
+  try { if (localStorage.getItem("stock-sort") === "pct") sortMode = "pct"; } catch (e) {}
+
+  function ordered(symbols, quotes) {
+    if (sortMode !== "pct") return symbols;
+    return symbols
+      .map(function (s, i) { return { s: s, i: i, q: quotes[s] }; })
+      .sort(function (a, b) {
+        if (!a.q && !b.q) return a.i - b.i;
+        if (!a.q) return 1;
+        if (!b.q) return -1;
+        return (b.q.pct - a.q.pct) || (a.i - b.i);
+      })
+      .map(function (x) { return x.s; });
+  }
+
+  function updateSortBtn() {
+    var btn = $("sort");
+    btn.textContent = sortMode === "pct" ? "↕ เรียงตาม %" : "↕ เรียงตามที่ตั้ง";
+    btn.setAttribute("aria-label", "สลับวิธีเรียงหุ้น ตอนนี้: " + (sortMode === "pct" ? "ตามเปอร์เซ็นต์ที่เปลี่ยน" : "ตามลำดับที่ตั้งไว้"));
+  }
+
   function render(tickers, prices) {
     var quotes = (prices && prices.quotes) || {};
     var grid = $("grid");
@@ -147,7 +176,7 @@
       box.className = "box" + (g.symbols.length > 8 ? " big" : "");
       var table = document.createElement("table");
       table.setAttribute("aria-label", g.name || "");
-      g.symbols.forEach(function (s) {
+      ordered(g.symbols, quotes).forEach(function (s) {
         var q = quotes[s];
         var tr = document.createElement("tr");
         var sym = cell(s, "sym");
@@ -195,18 +224,26 @@
       : missing.length ? "ไม่พบราคา: " + missing.join(", ") : "";
   }
 
-  var tickersCache = null;
   function load() {
     $("stamp").textContent = "กำลังโหลด…";
     var pricesReq = getJSON("prices.json").catch(function () { return null; });
     var tickersReq = getJSON("tickers.json");
     Promise.all([tickersReq, pricesReq]).then(function (r) {
       tickersCache = r[0];
+      pricesCache = r[1];
       render(r[0], r[1]);
     }).catch(function () {
       $("stamp").textContent = "โหลดรายชื่อหุ้นไม่สำเร็จ";
     });
   }
+
+  $("sort").addEventListener("click", function () {
+    sortMode = sortMode === "pct" ? "custom" : "pct";
+    try { localStorage.setItem("stock-sort", sortMode); } catch (e) {}
+    updateSortBtn();
+    if (tickersCache) render(tickersCache, pricesCache);
+  });
+  updateSortBtn();
 
   $("refresh").addEventListener("click", load);
   document.addEventListener("visibilitychange", function () {
