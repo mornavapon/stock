@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#000000">
 <meta name="mobile-web-app-capable" content="yes">
-<title>Stock</title>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
+<title>Stock</title>
 <style>
   :root {
     --bg: #000000;
@@ -18,6 +18,7 @@
     --up: #b5f26a;
     --down: #ff7b7b;
     --warn: #ffd166;
+    --rows: 28; /* จำนวนแถวสูงสุดที่แสดงในแต่ละกรอบ เกินนี้ให้เลื่อนนิ้ว */
     --font: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans Thai", sans-serif;
     color-scheme: dark;
   }
@@ -56,9 +57,12 @@
   .box {
     break-inside: avoid; margin-bottom: 10px; padding: 4px 8px;
     border: 1px dashed var(--box); border-radius: 8px;
+    max-height: calc(var(--rows) * 24px + 10px);
+    overflow-y: auto; overscroll-behavior: auto;
+    scrollbar-width: thin; scrollbar-color: var(--box) transparent;
   }
   table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
-  td { padding: 1px 0 1px 8px; text-align: right; white-space: nowrap; }
+  td { padding: 1px 0 1px 8px; line-height: 22px; text-align: right; white-space: nowrap; }
   td.sym { padding-left: 0; text-align: left; max-width: 6.5rem; overflow: hidden; text-overflow: ellipsis; }
   td.none { color: var(--muted); font-weight: 400; }
   .up { color: var(--up); }
@@ -93,8 +97,10 @@
   function num(n, d) {
     return n.toLocaleString("en-US", { minimumFractionDigits: d, maximumFractionDigits: d });
   }
-  function signed(n, d) { return (n > 0 ? "+" : "") + num(n, d); }
-  function cls(n) { return n > 0 ? "up" : n < 0 ? "down" : "flat"; }
+  // ค่าที่ปัดแล้วเป็นศูนย์ ให้ถือว่าเป็น 0 จริงๆ จะได้ไม่ขึ้น -0.00
+  function zero(n, d) { return Math.abs(n) < 0.5 * Math.pow(10, -d) ? 0 : n; }
+  function signed(n, d) { n = zero(n, d); return (n > 0 ? "+" : "") + num(n, d); }
+  function cls(n, d) { n = zero(n, d); return n > 0 ? "up" : n < 0 ? "down" : "flat"; }
 
   function cell(text, className) {
     var td = document.createElement("td");
@@ -122,8 +128,8 @@
         tr.appendChild(sym);
         if (q) {
           tr.appendChild(cell(num(q.p, 2)));
-          tr.appendChild(cell(signed(q.c, 2), cls(q.c)));
-          tr.appendChild(cell(signed(q.pct, 2) + "%", "pct " + cls(q.pct)));
+          tr.appendChild(cell(signed(q.c, 2), cls(q.c, 2)));
+          tr.appendChild(cell(signed(q.pct, 2) + "%", "pct " + cls(q.pct, 2)));
         } else {
           missing.push(s);
           tr.appendChild(cell("—", "none"));
