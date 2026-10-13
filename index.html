@@ -72,7 +72,12 @@
   .down { color: var(--down); }
   .flat { color: var(--muted); }
   #note { color: var(--muted); font-weight: 400; font-size: 13px; margin: 4px 2px 0; overflow-wrap: anywhere; }
-  @media (max-width: 560px) { .pct { display: none; } }
+  /* มือถือ: แสดงครบ 4 คอลัมน์ (ชื่อ ราคา เปลี่ยน %เปลี่ยน) ตัวเล็กลงนิดหนึ่งให้พอดีจอ และจำกัดจำนวนแถวของบางกรอบ */
+  @media (max-width: 560px) {
+    table { font-size: 14px; }
+    td { padding-left: 6px; }
+    .box { max-height: calc(var(--rows-phone, var(--rows)) * 24px + 10px); }
+  }
   /* จอกว้าง (tablet แนวนอน): แบ่งเป็นคอลัมน์สูงเท่าจอ กรอบที่ยาวจะหดลงและเลื่อนนิ้วดู */
   @media (min-width: 1100px) {
     body {
@@ -110,6 +115,8 @@
     "หุ้นไทย 2": 2, "ETF เวียดนามและฮ่องกง": 2, "น้ำมัน ทอง แก๊ส": 2,
     "ค่าเงินบาท": 3, "คริปโต": 3, "ดัชนีสหรัฐ": 3, "หุ้นสหรัฐ": 3
   };
+  // บนมือถือ กรอบไหนให้เห็นกี่แถวก่อนเลื่อนนิ้ว (ถ้าใน tickers.json ใส่ "phoneRows": เลข ไว้ จะใช้เลขนั้นแทน)
+  var PHONE_ROWS = { "หุ้นไทย 2": 12 };
 
   function $(id) { return document.getElementById(id); }
 
@@ -174,6 +181,8 @@
       }
       var box = document.createElement("div");
       box.className = "box" + (g.symbols.length > 8 ? " big" : "");
+      var phoneRows = g.phoneRows || PHONE_ROWS[g.name];
+      if (phoneRows) box.style.setProperty("--rows-phone", phoneRows);
       var table = document.createElement("table");
       table.setAttribute("aria-label", g.name || "");
       ordered(g.symbols, quotes).forEach(function (s) {
