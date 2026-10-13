@@ -1,0 +1,24 @@
+name: update-prices
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch prices
+        run: python3 fetch_prices.py
+      - name: Save prices
+        run: |
+          git config user.name "price-bot"
+          git config user.email "price-bot@users.noreply.github.com"
+          git add prices.json
+          git diff --cached --quiet || git commit -m "update prices"
+          git push
