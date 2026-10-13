@@ -1,0 +1,36 @@
+{
+  "groups": [
+    { "name": "ดัชนีไทย", "symbols": ["^SET.BK"] },
+    {
+      "name": "หุ้นไทย 1",
+      "symbols": [
+        "ADVANC.BK", "BBL.BK", "BDMS.BK", "BTS.BK", "CPALL.BK", "CPAXT.BK", "CPF.BK",
+        "AXTRART.BK", "DCC.BK", "DRT.BK", "EGCO.BK", "GPSC.BK", "IMPACT.BK", "KBANK.BK",
+        "M.BK", "MJLF.BK", "RATCH.BK", "SCB.BK", "SCC.BK", "TVO.BK", "GULF.BK", "KYE.BK",
+        "NVDA80.BK", "CHAYO.BK", "HMPRO.BK", "SCGP.BK", "300750.SZ"
+      ]
+    },
+    {
+      "name": "หุ้นไทย 2",
+      "symbols": [
+        "ASP.BK", "BA.BK", "STGT.BK", "PTT.BK", "OR.BK", "BH.BK", "TFMAMA.BK", "BJC.BK",
+        "JMART.BK", "VIH.BK", "CPN.BK", "BAFS.BK", "KKP.BK", "AOT.BK", "CENTEL.BK", "MINT.BK",
+        "TU.BK", "BTG.BK", "COM7.BK", "LH.BK", "PSH.BK", "JUBILE.BK", "BCP.BK", "AIT.BK",
+        "PTTEP.BK", "PDG.BK", "CBG.BK"
+      ]
+    },
+    { "name": "ETF เวียดนามและฮ่องกง", "symbols": ["FUEVFVND.VN", "E1VFVN30.VN", "2828.HK", "3188.HK"] },
+    { "name": "น้ำมัน ทอง แก๊ส", "symbols": ["BZ=F", "CL=F", "GC=F", "NG=F"] },
+    { "name": "ค่าเงินบาท", "symbols": ["THB=X"] },
+    { "name": "คริปโต", "symbols": ["BTC-USD", "ETH-USD"] },
+    { "name": "ดัชนีสหรัฐ", "symbols": ["^DJI", "^GSPC", "^NYA", "^IXIC"] },
+    {
+      "name": "หุ้นสหรัฐ",
+      "symbols": [
+        "KO", "VGLT", "VTI", "VOO", "MU", "ARM", "NVDA", "TSM", "ASML", "TSLA", "META", "GOOG",
+        "AAPL", "MSFT", "PFE", "MRNA", "BLK", "V", "MCD", "JNJ", "PG", "BRK-A", "BRK-B", "WMT",
+        "HD", "TGT", "COST", "INTC", "COIN", "NFLX", "VZ", "TMUS", "BAC"
+      ]
+    }
+  ]
+}
