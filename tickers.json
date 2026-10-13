@@ -20,7 +20,7 @@
       ]
     },
     { "name": "ETF เวียดนามและฮ่องกง", "symbols": ["FUEVFVND.VN", "E1VFVN30.VN", "2828.HK", "3188.HK"] },
-    { "name": "น้ำมัน ทอง แก๊ส", "symbols": ["BZ=F", "CL=F", "GC=F", "NG=F"] },
+    { "name": "น้ำมัน ทอง แก๊ส", "symbols": ["BZ=F", "CL=F", "XAUUSD=X", "TTF=F"] },
     { "name": "ค่าเงินบาท", "symbols": ["THB=X"] },
     { "name": "คริปโต", "symbols": ["BTC-USD", "ETH-USD"] },
     { "name": "ดัชนีสหรัฐ", "symbols": ["^DJI", "^GSPC", "^NYA", "^IXIC"] },
