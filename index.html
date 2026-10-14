@@ -55,8 +55,10 @@
     border: 1px solid var(--box); border-radius: 6px; padding: 2px 10px;
   }
   button:focus-visible { outline: 2px solid var(--up); outline-offset: 2px; }
-  #grid { column-width: 21rem; column-gap: 10px; }
+  #pages { display: block; }
+  .page { column-width: 21rem; column-gap: 10px; }
   .col { display: contents; }
+  #dots { display: none; }
   .box {
     break-inside: avoid; margin-bottom: 10px; padding: 4px 8px;
     border: 1px dashed var(--box); border-radius: 8px;
@@ -84,10 +86,23 @@
       height: 100dvh; display: flex; flex-direction: column;
       padding-bottom: max(44px, env(safe-area-inset-bottom)); /* เว้นขอบล่าง ให้ทุกคอลัมน์จบพร้อมกัน */
     }
-    #grid {
-      column-width: auto; flex: 1 1 auto; min-height: 0; display: grid;
-      grid-template-columns: repeat(var(--cols, 3), minmax(0, 1fr)); gap: 10px;
+    /* หลายหน้า: ปัดซ้าย-ขวาเพื่อสลับหน้า */
+    #pages {
+      flex: 1 1 auto; min-height: 0; display: flex; overflow-x: auto; overflow-y: hidden;
+      scroll-snap-type: x mandatory; scrollbar-width: none; overscroll-behavior-x: contain;
     }
+    #pages::-webkit-scrollbar { display: none; }
+    .page {
+      column-width: auto; flex: 0 0 100%; min-width: 0; scroll-snap-align: start; scroll-snap-stop: always;
+      display: grid; grid-template-columns: repeat(var(--cols, 3), minmax(0, 1fr));
+      grid-template-rows: minmax(0, 1fr); gap: 10px; padding-right: 1px;
+    }
+    body.multi #dots {
+      display: flex; gap: 12px; position: fixed; left: 0; right: 0;
+      bottom: max(12px, env(safe-area-inset-bottom)); justify-content: center;
+    }
+    #dots button { width: 12px; height: 12px; padding: 0; border-radius: 50%; border: 1px solid var(--muted); background: transparent; }
+    #dots button.on { background: var(--fg); border-color: var(--fg); }
     .col { display: flex; flex-direction: column; gap: 10px; min-height: 0; }
     .box { margin-bottom: 0; flex: 0 0 auto; }
     .box.big { flex: 0 1 auto; min-height: 7rem; }
@@ -102,7 +117,8 @@
     <button id="refresh" type="button" aria-label="รีเฟรชราคา">↻</button>
   </span>
 </header>
-<main id="grid"></main>
+<main id="pages"></main>
+<div id="dots" aria-label="หน้า"></div>
 <p id="note"></p>
 
 <script>
@@ -116,7 +132,7 @@
     "ค่าเงินบาท": 3, "คริปโต": 3, "ดัชนีสหรัฐ": 3, "หุ้นสหรัฐ": 3
   };
   // บนมือถือ กรอบไหนให้เห็นกี่แถวก่อนเลื่อนนิ้ว (ถ้าใน tickers.json ใส่ "phoneRows": เลข ไว้ จะใช้เลขนั้นแทน)
-  var PHONE_ROWS = { "หุ้นไทย 2": 12 };
+  var PHONE_ROWS = { "หุ้นไทย 2": 10 };
 
   function $(id) { return document.getElementById(id); }
 
@@ -166,18 +182,37 @@
     btn.setAttribute("aria-label", "สลับวิธีเรียงหุ้น ตอนนี้: " + (sortMode === "pct" ? "ตามเปอร์เซ็นต์ที่เปลี่ยน" : "ตามลำดับที่ตั้งไว้"));
   }
 
+  var curPage = 0;
+  function wide() { return window.matchMedia("(min-width: 1100px)").matches; }
+  function goPage(i, smooth) {
+    var pg = $("pages");
+    if (!wide()) return;
+    pg.scrollTo({ left: i * pg.clientWidth, behavior: smooth ? "smooth" : "auto" });
+  }
+  function markDots() {
+    var pg = $("pages");
+    var i = pg.clientWidth ? Math.round(pg.scrollLeft / pg.clientWidth) : 0;
+    curPage = i;
+    var ds = $("dots").children;
+    for (var k = 0; k < ds.length; k++) ds[k].classList.toggle("on", k === i);
+  }
+
   function render(tickers, prices) {
     var quotes = (prices && prices.quotes) || {};
-    var grid = $("grid");
-    grid.textContent = "";
+    var pagesEl = $("pages");
+    pagesEl.textContent = "";
     var missing = [];
-    var colEls = {};
+    var pageSets = {};
 
     tickers.groups.forEach(function (g) {
+      var pageNo = g.page || 1;
+      if (!pageSets[pageNo]) pageSets[pageNo] = {};
+      var colEls = pageSets[pageNo];
       var colNo = g.col || DEFAULT_COL[g.name] || 1;
       if (!colEls[colNo]) {
         colEls[colNo] = document.createElement("div");
         colEls[colNo].className = "col";
+        colEls[colNo].style.gridColumn = colNo;
       }
       var box = document.createElement("div");
       box.className = "box" + (g.symbols.length > 8 ? " big" : "");
@@ -207,9 +242,30 @@
       colEls[colNo].appendChild(box);
     });
 
-    var colNos = Object.keys(colEls).map(Number).sort(function (a, b) { return a - b; });
-    colNos.forEach(function (n) { grid.appendChild(colEls[n]); });
-    grid.style.setProperty("--cols", colNos.length);
+    var pageNos = Object.keys(pageSets).map(Number).sort(function (a, b) { return a - b; });
+    pageNos.forEach(function (p) {
+      var colEls = pageSets[p];
+      var page = document.createElement("section");
+      page.className = "page";
+      var colNos = Object.keys(colEls).map(Number).sort(function (a, b) { return a - b; });
+      colNos.forEach(function (n) { page.appendChild(colEls[n]); });
+      page.style.setProperty("--cols", Math.max(3, colNos[colNos.length - 1]));
+      pagesEl.appendChild(page);
+    });
+
+    var dots = $("dots");
+    dots.textContent = "";
+    pageNos.forEach(function (p, i) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.setAttribute("aria-label", "หน้า " + (i + 1));
+      b.addEventListener("click", function () { goPage(i, true); });
+      dots.appendChild(b);
+    });
+    document.body.classList.toggle("multi", pageNos.length > 1);
+    if (curPage >= pageNos.length) curPage = 0;
+    goPage(curPage, false);
+    markDots();
 
     var top = $("top");
     var stamp = $("stamp");
@@ -254,6 +310,7 @@
   });
   updateSortBtn();
 
+  $("pages").addEventListener("scroll", markDots);
   $("refresh").addEventListener("click", load);
   document.addEventListener("visibilitychange", function () {
     if (!document.hidden) load();
