@@ -30,9 +30,14 @@
         "KO", "VGLT", "VTI", "VOO", "MU", "ARM", "NVDA", "TSM", "ASML", "TSLA", "META", "GOOG",
         "AAPL", "MSFT", "PFE", "MRNA", "BLK", "V", "MCD", "JNJ", "PG", "BRK-A", "BRK-B", "WMT",
         "HD", "TGT", "COST", "INTC", "COIN", "NFLX", "VZ", "TMUS", "BAC",
-        "QQQ", "000660.KS", "005930.KS", "SPCX", "3750.HK", "LMT", "LHX", "GRID", "QCOM", "YUM",
-        "XLRE", "XLF", "XLB", "XLE", "XLP", "XLC", "XLY", "XLK", "XLV", "XLI", "XLU"
+        "QQQ", "000660.KS", "005930.KS", "SPCX", "3750.HK", "LMT", "LHX", "GRID", "QCOM", "YUM"
       ]
+    },
+    {
+      "name": "Sector หุ้นสหรัฐ",
+      "page": 2,
+      "col": 1,
+      "symbols": ["XLRE", "XLF", "XLB", "XLE", "XLP", "XLC", "XLY", "XLK", "XLV", "XLI", "XLU"]
     }
   ]
 }
