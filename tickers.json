@@ -7,7 +7,7 @@
         "ADVANC.BK", "BBL.BK", "BDMS.BK", "BTS.BK", "CPALL.BK", "CPAXT.BK", "CPF.BK",
         "AXTRART.BK", "DCC.BK", "DRT.BK", "EGCO.BK", "GPSC.BK", "IMPACT.BK", "KBANK.BK",
         "M.BK", "MJLF.BK", "RATCH.BK", "SCB.BK", "SCC.BK", "TVO.BK", "GULF.BK", "KYE.BK",
-        "NVDA80.BK", "CHAYO.BK", "HMPRO.BK", "SCGP.BK", "300750.SZ"
+        "NVDA80.BK", "HMPRO.BK", "SCGP.BK", "300750.SZ"
       ]
     },
     {
@@ -27,7 +27,7 @@
     {
       "name": "หุ้นสหรัฐ",
       "symbols": [
-        "KO", "VGLT", "VTI", "VOO", "MU", "ARM", "NVDA", "TSM", "ASML", "TSLA", "META", "GOOG",
+        "KO", "VGLT", "VTI", "VOO", "MU", "ARM", "NVDA", "TSM", "GOOG", "ASML", "TSLA", "META",
         "AAPL", "MSFT", "PFE", "MRNA", "BLK", "V", "MCD", "JNJ", "PG", "BRK-A", "BRK-B", "WMT",
         "HD", "TGT", "COST", "INTC", "COIN", "NFLX", "VZ", "TMUS", "BAC",
         "QQQ", "000660.KS", "005930.KS", "SPCX", "3750.HK", "LMT", "LHX", "GRID", "QCOM", "YUM"
