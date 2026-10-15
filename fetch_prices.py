@@ -28,7 +28,11 @@ def fetch(symbol):
                 prev = res["meta"].get("chartPreviousClose") or price
             change = price - prev
             pct = (change / prev * 100) if prev else 0.0
-            return symbol, {"p": round(price, 4), "c": round(change, 4), "pct": round(pct, 4)}
+            q = {"p": round(price, 4), "c": round(change, 4), "pct": round(pct, 4)}
+            t = res["meta"].get("regularMarketTime")
+            if t:
+                q["t"] = int(t)  # เวลาที่ตลาดซื้อขายล่าสุด (วินาที) ใช้เช็กว่าข้อมูลเก่าไหม
+            return symbol, q
         except Exception:
             continue
     return symbol, None
