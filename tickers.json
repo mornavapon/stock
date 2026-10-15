@@ -57,7 +57,7 @@
       "col": 2,
       "notify": "pm",
       "symbols": [
-        "^HSCE", "000001.SS", "^VNINDEX.VN", "^TOPX", "^TWII", "^KS11", "^NSEI", "^STI", "^KLSE"
+        "^HSCE", "000001.SS", "^VNINDEX.VN", "^N225", "^TWII", "^KS11", "^NSEI", "^STI", "^KLSE"
       ]
     }
   ]
