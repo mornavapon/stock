@@ -5,8 +5,7 @@
       "name": "หุ้นไทย 1",
       "notify": "pm",
       "symbols": [
-        "ADVANC.BK", "BBL.BK", "BDMS.BK", "BTS.BK", "CPALL.BK", "CPAXT.BK", "CPF.BK",
-        "AXTRART.BK", "DCC.BK", "DRT.BK", "EGCO.BK", "GPSC.BK", "HMPRO.BK", "IMPACT.BK", "KBANK.BK", "M.BK",
+        "ADVANC.BK", "AXTRART.BK", "BBL.BK", "BDMS.BK", "BTS.BK", "CPALL.BK", "CPAXT.BK", "CPF.BK", "DCC.BK", "DRT.BK", "EGCO.BK", "GPSC.BK", "HMPRO.BK", "IMPACT.BK", "KBANK.BK", "M.BK",
         "MJLF.BK", "RATCH.BK", "SCB.BK", "SCC.BK", "TVO.BK", "GULF.BK", "KYE.BK", "NVDA80.BK",
         "TRUE.BK", "300750.SZ"
       ]
