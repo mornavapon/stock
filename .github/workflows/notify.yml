@@ -3,13 +3,14 @@ name: notify-movers
 on:
   schedule:
     - cron: "0 1 * * *"   # 08:00 เวลาไทย -> สรุปตลาดสหรัฐ
+    - cron: "50 5 * * *"  # 12:50 เวลาไทย -> หุ้นไทยหลังปิดภาคเช้า
     - cron: "0 13 * * *"  # 20:00 เวลาไทย -> สรุปตลาดเอเชียและหุ้นไทย
   workflow_dispatch:
     inputs:
       mode:
-        description: "ping = ทดสอบข้อความสั้น, am = สรุปสหรัฐ, pm = สรุปเอเชีย"
+        description: "ping = ทดสอบข้อความสั้น, am = สรุปสหรัฐ, noon = หุ้นไทยพักเที่ยง, pm = สรุปเอเชีย"
         type: choice
-        options: [ping, am, pm]
+        options: [ping, am, noon, pm]
         default: ping
       force:
         description: "ข้ามการเช็กว่าข้อมูลเก่า (ใช้ทดสอบวันที่ตลาดปิด)"
@@ -30,6 +31,6 @@ jobs:
       - name: Send notification
         env:
           NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
-          MODE: ${{ github.event_name == 'schedule' && (github.event.schedule == '0 1 * * *' && 'am' || 'pm') || inputs.mode }}
+          MODE: ${{ github.event_name == 'schedule' && (github.event.schedule == '0 1 * * *' && 'am' || (github.event.schedule == '50 5 * * *' && 'noon' || 'pm')) || inputs.mode }}
           FORCE: ${{ inputs.force }}
         run: python3 notify.py
