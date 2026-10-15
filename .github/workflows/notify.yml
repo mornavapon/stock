@@ -1,0 +1,35 @@
+name: notify-movers
+
+on:
+  schedule:
+    - cron: "0 1 * * *"   # 08:00 เวลาไทย -> สรุปตลาดสหรัฐ
+    - cron: "0 13 * * *"  # 20:00 เวลาไทย -> สรุปตลาดเอเชียและหุ้นไทย
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "ping = ทดสอบข้อความสั้น, am = สรุปสหรัฐ, pm = สรุปเอเชีย"
+        type: choice
+        options: [ping, am, pm]
+        default: ping
+      force:
+        description: "ข้ามการเช็กว่าข้อมูลเก่า (ใช้ทดสอบวันที่ตลาดปิด)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch prices
+        if: ${{ github.event_name == 'schedule' || inputs.mode != 'ping' }}
+        run: python3 fetch_prices.py
+      - name: Send notification
+        env:
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+          MODE: ${{ github.event_name == 'schedule' && (github.event.schedule == '0 1 * * *' && 'am' || 'pm') || inputs.mode }}
+          FORCE: ${{ inputs.force }}
+        run: python3 notify.py
