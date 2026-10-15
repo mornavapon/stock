@@ -2,6 +2,7 @@
 
 MODE=am   -> ตลาดสหรัฐ (ส่งตอน 08:00 เวลาไทย)
 MODE=pm   -> ตลาดเอเชียและหุ้นไทย (ส่งตอน 20:00 เวลาไทย)
+MODE=noon -> หุ้นไทยหลังปิดภาคเช้า (ส่งตอน 12:50 เวลาไทย)
 MODE=ping -> ส่งข้อความทดสอบสั้นๆ
 """
 import json
@@ -13,6 +14,7 @@ from urllib.request import Request, urlopen
 SITE = "https://mornavapon.github.io/stock/"
 ICON = SITE + "icon-192.png"
 MAX_AGE_H = 14   # ข้อมูลที่ตลาดซื้อขายล่าสุดเก่ากว่านี้ (ชั่วโมง) ถือว่าตลาดปิดวันนี้ ไม่นำมาจัดอันดับ
+NOON_GROUPS = ["หุ้นไทย 1", "หุ้นไทย 2"]  # กรอบที่ใช้ในรอบพักเที่ยง (เอาเฉพาะหุ้นไทย .BK)
 TOP_N = 3        # ขึ้นแรง/ลงแรง กี่ตัวต่อกรอบ (กรอบที่มีหุ้นน้อย จะลดลงให้อัตโนมัติ)
 
 
@@ -24,6 +26,11 @@ def load(path):
 def make_boxes(groups, mode):
     """คืนรายการ (ชื่อกรอบ, [หุ้น]) ของรอบนี้"""
     boxes = []
+    if mode == "noon":
+        for g in groups:
+            if g["name"] in NOON_GROUPS:
+                boxes.append((g["name"], [x for x in g["symbols"] if x.endswith(".BK")]))
+        return boxes
     for g in groups:
         tag = g.get("notify")
         syms = g["symbols"]
@@ -107,10 +114,13 @@ def main():
         groups = load("tickers.json")["groups"]
         prices = load("prices.json")
         message = build(make_boxes(groups, mode), prices.get("quotes", {}), force)
-        title = "ปิดตลาดสหรัฐ: ขึ้นแรง/ลงแรง" if mode == "am" else "ปิดตลาดเอเชีย: ขึ้นแรง/ลงแรง"
+        title = {"am": "ปิดตลาดสหรัฐ: ขึ้นแรง/ลงแรง",
+                 "noon": "หุ้นไทยพักเที่ยง: ขึ้นแรง/ลงแรง"}.get(mode, "ปิดตลาดเอเชีย: ขึ้นแรง/ลงแรง")
         if not message:
             print("ไม่มีตลาดที่เพิ่งปิด (อาจเป็นวันหยุด) จึงไม่ส่งแจ้งเตือน")
             return
+        if mode == "noon":
+            message = "ราคา ณ ปิดตลาดภาคเช้า\n\n" + message
 
     if dry:
         print(title)
