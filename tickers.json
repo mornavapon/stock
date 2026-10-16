@@ -26,8 +26,8 @@
       "symbols": ["FUEVFVND.VN", "E1VFVN30.VN", "2828.HK", "3188.HK"]
     },
     { "name": "น้ำมัน ทอง แก๊ส", "symbols": ["BZ=F", "CL=F", "GC=F", "TTF=F"] },
-    { "name": "ค่าเงินบาท", "symbols": ["THB=X"] },
-    { "name": "คริปโต", "symbols": ["BTC-USD", "ETH-USD"] },
+    { "name": "ค่าเงินบาท", "col": 2, "symbols": ["THB=X"] },
+    { "name": "คริปโต", "col": 2, "symbols": ["BTC-USD", "ETH-USD"] },
     {
       "name": "ดัชนีสหรัฐ",
       "notify": "am",
