@@ -106,6 +106,7 @@
     .col { display: flex; flex-direction: column; gap: 10px; min-height: 0; }
     .box { margin-bottom: 0; flex: 0 0 auto; }
     .box.big { flex: 0 1 auto; min-height: 7rem; }
+    .box.fixedrows { flex: 0 0 auto; min-height: 0; max-height: calc(var(--rows-tablet) * 24px + 10px); }
   }
 </style>
 </head>
@@ -132,7 +133,9 @@
     "ค่าเงินบาท": 3, "คริปโต": 3, "ดัชนีสหรัฐ": 3, "หุ้นสหรัฐ": 3
   };
   // บนมือถือ กรอบไหนให้เห็นกี่แถวก่อนเลื่อนนิ้ว (ถ้าใน tickers.json ใส่ "phoneRows": เลข ไว้ จะใช้เลขนั้นแทน)
-  var PHONE_ROWS = { "หุ้นไทย 2": 10 };
+  var PHONE_ROWS = { "หุ้นไทย 2": 10, "หุ้นสหรัฐ": 20 };
+  // บนจอกว้าง (tablet) กรอบไหนให้สูงเท่ากี่แถวคงที่ เกินนี้เลื่อนนิ้วดู (ถ้าใน tickers.json ใส่ "tabletRows": เลข ไว้ จะใช้เลขนั้นแทน)
+  var TABLET_ROWS = { "หุ้นไทย 2": 14 };
 
   function $(id) { return document.getElementById(id); }
 
@@ -218,6 +221,11 @@
       box.className = "box" + (g.symbols.length > 8 ? " big" : "");
       var phoneRows = g.phoneRows || PHONE_ROWS[g.name];
       if (phoneRows) box.style.setProperty("--rows-phone", phoneRows);
+      var tabletRows = g.tabletRows || TABLET_ROWS[g.name];
+      if (tabletRows) {
+        box.style.setProperty("--rows-tablet", tabletRows);
+        box.classList.add("fixedrows");
+      }
       var table = document.createElement("table");
       table.setAttribute("aria-label", g.name || "");
       ordered(g.symbols, quotes).forEach(function (s) {
