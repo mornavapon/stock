@@ -23,7 +23,7 @@
     {
       "name": "ETF เวียดนามและฮ่องกง",
       "notify": "pm",
-      "symbols": ["FUEVFVND.VN", "E1VFVN30.VN", "2828.HK", "3188.HK"]
+      "symbols": ["E1VFVN3001.BK", "FUEVFVND01.BK", "2828.HK", "3188.HK"]
     },
     { "name": "น้ำมัน ทอง แก๊ส", "symbols": ["BZ=F", "CL=F", "GC=F", "TTF=F"] },
     { "name": "ค่าเงินบาท", "col": 2, "symbols": ["THB=X"] },
