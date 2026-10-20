@@ -83,7 +83,7 @@ def build(boxes, quotes, force):
 def send(topic, title, message):
     body = json.dumps({
         "topic": topic, "title": title, "message": message,
-        "click": SITE, "icon": ICON, "tags": ["chart_with_upwards_trend"],
+        "icon": ICON, "tags": ["chart_with_upwards_trend"],
         "priority": 4,  # 4 = สูง: Android จะเด้งเป็นป๊อปอัปบนจอ
     }, ensure_ascii=False).encode("utf-8")
     req = Request("https://ntfy.sh/", data=body,
