@@ -75,13 +75,13 @@
   .flat { color: var(--muted); }
   #note { color: var(--muted); font-weight: 400; font-size: 13px; margin: 4px 2px 0; overflow-wrap: anywhere; }
   /* มือถือ: แสดงครบ 4 คอลัมน์ (ชื่อ ราคา เปลี่ยน %เปลี่ยน) ตัวเล็กลงนิดหนึ่งให้พอดีจอ และจำกัดจำนวนแถวของบางกรอบ */
-  @media (max-width: 560px) {
+  @media (max-width: 899px) {
     table { font-size: 14px; }
     td { padding-left: 6px; }
     .box { max-height: calc(var(--rows-phone, var(--rows)) * 24px + 10px); }
   }
-  /* ปัดซ้าย-ขวาเปลี่ยนหน้า: ใช้ทั้งมือถือ (<=560px) และ tablet แนวนอน (>=1100px) */
-  @media (min-width: 1100px), (max-width: 560px) {
+  /* ปัดซ้าย-ขวาเปลี่ยนหน้า: ใช้ทั้งทุกขนาดจอ: จอแคบกว่า 900px = แบบมือถือ, 900px ขึ้นไป = แบบแท็บเล็ต */
+  @media all {
     body {
       height: 100dvh; display: flex; flex-direction: column;
       padding-bottom: max(44px, env(safe-area-inset-bottom)); /* เว้นขอบล่าง ให้มีที่วางจุดบอกหน้า */
@@ -102,11 +102,11 @@
     #dots button.on { background: var(--fg); border-color: var(--fg); }
   }
   /* มือถือ: แต่ละหน้าเลื่อนขึ้น-ลงได้ */
-  @media (max-width: 560px) {
+  @media (max-width: 899px) {
     .page { display: block; overflow-y: auto; overflow-x: hidden; padding-right: 1px; }
   }
   /* จอกว้าง (tablet แนวนอน): แบ่งเป็นคอลัมน์สูงเท่าจอ กรอบที่ยาวจะหดลงและเลื่อนนิ้วดู */
-  @media (min-width: 1100px) {
+  @media (min-width: 900px) {
     .page {
       display: grid; grid-template-columns: repeat(var(--cols, 3), minmax(0, 1fr));
       grid-template-rows: minmax(0, 1fr); gap: 10px; padding-right: 1px;
@@ -194,7 +194,7 @@
   }
 
   var curPage = 0;
-  function wide() { return window.matchMedia("(min-width: 1100px), (max-width: 560px)").matches; }
+  function wide() { return true; }
   function goPage(i, smooth) {
     var pg = $("pages");
     if (!wide()) return;
