@@ -1,18 +1,24 @@
 {
   "groups": [
-    { "name": "ดัชนีไทย", "symbols": ["^SET.BK"] },
+    {
+      "name": "ดัชนีไทย",
+      "col": 1,
+      "symbols": ["^SET.BK"]
+    },
     {
       "name": "หุ้นไทย 1",
+      "col": 1,
       "notify": "pm",
       "symbols": [
-        "ADVANC.BK", "AXTRART.BK", "BBL.BK", "BDMS.BK", "BTS.BK", "CPALL.BK", "CPAXT.BK", "CPF.BK", "DCC.BK", "DRT.BK",
-        "EGCO.BK", "GPSC.BK", "GULF.BK", "HMPRO.BK", "IMPACT.BK", "KBANK.BK",
+        "ADVANC.BK", "AXTRART.BK", "BBL.BK", "BDMS.BK", "BTS.BK", "CPALL.BK", "CPAXT.BK", "CPF.BK",
+        "DCC.BK", "DRT.BK", "EGCO.BK", "GPSC.BK", "GULF.BK", "HMPRO.BK", "IMPACT.BK", "KBANK.BK",
         "MJLF.BK", "RATCH.BK", "SCB.BK", "SCC.BK", "TRUE.BK", "TVO.BK", "KYE.BK", "NVDA80.BK",
         "300750.SZ"
       ]
     },
     {
       "name": "หุ้นไทย 2",
+      "col": 2,
       "notify": "pm",
       "symbols": [
         "ASP.BK", "BA.BK", "STGT.BK", "PTT.BK", "OR.BK", "BH.BK", "TFMAMA.BK", "BJC.BK",
@@ -23,44 +29,60 @@
     },
     {
       "name": "ETF เวียดนามและฮ่องกง",
+      "col": 2,
       "notify": "pm",
       "symbols": ["E1VFVN3001.BK", "FUEVFVND01.BK", "2828.HK", "3188.HK"]
     },
-    { "name": "น้ำมัน ทอง แก๊ส", "symbols": ["BZ=F", "CL=F", "GC=F", "TTF=F"] },
-    { "name": "ค่าเงินบาท", "col": 2, "symbols": ["THB=X"] },
-    { "name": "คริปโต", "col": 2, "symbols": ["BTC-USD", "ETH-USD"] },
+    {
+      "name": "น้ำมัน ทอง แก๊ส",
+      "col": 2,
+      "symbols": ["BZ=F", "CL=F", "GC=F", "TTF=F"]
+    },
+    {
+      "name": "ค่าเงินบาท",
+      "col": 2,
+      "symbols": ["THB=X"]
+    },
+    {
+      "name": "คริปโต",
+      "col": 2,
+      "symbols": ["BTC-USD", "ETH-USD"]
+    },
+    {
+      "name": "ดัชนีหุ้นเอเชีย",
+      "col": 3,
+      "notify": "pm",
+      "symbols": [
+        "^HSCE", "000001.SS", "^VNINDEX.VN", "^N225", "^TWII", "^KS11", "^NSEI", "^STI", "^KLSE"
+      ]
+    },
     {
       "name": "ดัชนีสหรัฐ",
+      "page": 2,
+      "col": 1,
       "notify": "am",
       "symbols": ["^DJI", "^GSPC", "^NYA", "^IXIC"]
     },
     {
       "name": "หุ้นสหรัฐ",
+      "page": 2,
+      "col": 1,
       "notify": "am",
       "symbols": [
         "KO", "VGLT", "VTI", "VOO", "MU", "ARM", "NVDA", "TSM", "ASML", "TSLA", "META", "GOOG",
         "AAPL", "MSFT", "PFE", "MRNA", "BLK", "V", "MCD", "JNJ", "PG", "BRK-A", "BRK-B", "WMT",
         "HD", "TGT", "COST", "INTC", "COIN", "NFLX", "VZ", "TMUS", "BAC", "QQQ", "000660.KS",
-        "005930.KS", "SPCX", "3750.HK", "LMT", "LHX", "GRID", "QCOM", "YUM","GS", "JPM",
-        "UNH", "AMGN", "FDX", "CAT", "CSCO", "AMD", "RBLX", "PLTR", "AVGO",
-        "AMZN", "SE", "CME", "NDAQ", "MSTR", "VFS", "CRWV", "NBIS", "IREN", "LITE", "COHR"
+        "005930.KS", "SPCX", "3750.HK", "LMT", "LHX", "GRID", "QCOM", "YUM", "GS", "JPM", "UNH",
+        "AMGN", "FDX", "CAT", "CSCO", "AMD", "RBLX", "PLTR", "AVGO", "AMZN", "SE", "CME", "NDAQ",
+        "MSTR", "VFS", "CRWV", "NBIS", "IREN", "LITE", "COHR"
       ]
     },
     {
       "name": "Sector หุ้นสหรัฐ",
       "page": 2,
-      "col": 1,
+      "col": 2,
       "notify": "am",
       "symbols": ["XLRE", "XLF", "XLB", "XLE", "XLP", "XLC", "XLY", "XLK", "XLV", "XLI", "XLU"]
-    },
-    {
-      "name": "ดัชนีหุ้นเอเชีย",
-      "page": 2,
-      "col": 2,
-      "notify": "pm",
-      "symbols": [
-        "^HSCE", "000001.SS", "^VNINDEX.VN", "^N225", "^TWII", "^KS11", "^NSEI", "^STI", "^KLSE"
-      ]
     }
   ]
 }
