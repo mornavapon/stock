@@ -297,6 +297,38 @@ def yahoo_fundamentals(symbols):
     return out
 
 
+def yahoo_names(symbols):
+    """ชื่อบริษัท/กองทุนจาก Yahoo (ใช้สำรอง เมื่อ chart API ไม่ส่งชื่อมา) คืน {symbol: name}"""
+    global _crumb
+    s = get_session()
+    out = {}
+    if s is None or not symbols:
+        return out
+    try:
+        if _crumb is None:
+            r = s.get("https://query1.finance.yahoo.com/v1/test/getcrumb", timeout=20)
+            c = r.text.strip()
+            if r.status_code != 200 or not c or "<" in c or " " in c:
+                raise HttpErr(r.status_code, "getcrumb")
+            _crumb = c
+        for i in range(0, len(symbols), 40):
+            chunk = symbols[i:i + 40]
+            url = ("https://query1.finance.yahoo.com/v7/finance/quote?symbols="
+                   + urllib.parse.quote(",".join(chunk), safe=",") + "&crumb=" + urllib.parse.quote(_crumb))
+            r = s.get(url, timeout=30)
+            if r.status_code != 200:
+                print("Yahoo names HTTP", r.status_code, file=sys.stderr)
+                continue
+            for it in r.json().get("quoteResponse", {}).get("result", []):
+                nm = it.get("longName") or it.get("shortName")
+                if nm:
+                    out[str(it.get("symbol", "")).upper()] = " ".join(str(nm).split())[:80]
+            time.sleep(1)
+    except Exception as e:  # noqa: BLE001
+        print("ดึงชื่อหุ้นจาก Yahoo ไม่ได้ (ข้ามไป):", e, file=sys.stderr)
+    return out
+
+
 def trailing_dividend_yield(sym, price):
     """% ปันผลย้อนหลัง 12 เดือน = ผลรวมปันผลที่จ่ายใน 1 ปี / ราคาปัจจุบัน"""
     data = fetch_chart(sym, "interval=1d&range=1y&events=div")
@@ -445,6 +477,20 @@ def main():
         # รอบแรกที่ยังไม่เคยได้ราคาเลย ให้ขึ้นแดงเพื่อให้รู้ว่ามีปัญหา
         # แต่ถ้าเคยได้แล้ว ถือว่าชั่วคราว ไม่ต้องแจ้งเตือนซ้ำทุก 30 นาที
         sys.exit(0 if old_q else 1)
+
+    # ชื่อหุ้น: ตัวไหนยังไม่มีชื่อ ลองขอจาก Yahoo อีกทาง (ถ้าพังก็ข้าม ราคาไม่กระทบ)
+    if not stopped:
+        miss = [s for s, q in quotes.items() if not q.get("name")]
+        if miss:
+            try:
+                got = yahoo_names(miss)
+                for s_, nm in got.items():
+                    for k in (s_, *[m for m in miss if m.upper() == s_]):
+                        if k in quotes and not quotes[k].get("name"):
+                            quotes[k]["name"] = nm
+                print(f"ชื่อหุ้น: ขาด {len(miss)} ตัว ได้เพิ่ม {len(got)} ตัว")
+            except Exception as e:  # noqa: BLE001
+                print("ชื่อหุ้นผิดพลาด (ข้ามไป):", e, file=sys.stderr)
 
     for q in quotes.values():
         want_cur.add(q["currency"])
