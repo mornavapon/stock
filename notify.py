@@ -1,7 +1,7 @@
 """ส่งสรุปหุ้นขึ้นแรง/ลงแรงของแต่ละกรอบ ไปที่แอป ntfy บนมือถือและแท็บเล็ต
 
 MODE=am   -> ตลาดสหรัฐ (ส่งตอน 08:00 เวลาไทย)
-MODE=pm   -> ตลาดเอเชียและหุ้นไทย (ส่งตอน 20:00 เวลาไทย)
+MODE=pm   -> ตลาดเอเชียและหุ้นไทย (ส่งตอน 18:30 เวลาไทย)
 MODE=noon -> หุ้นไทยหลังปิดภาคเช้า (ส่งตอน 12:50 เวลาไทย)
 MODE=ping -> ส่งข้อความทดสอบสั้นๆ
 """
@@ -35,13 +35,10 @@ def make_boxes(groups, mode):
         tag = g.get("notify")
         syms = g["symbols"]
         if tag == "am":
-            # หุ้นต่างประเทศที่อยู่ในกรอบสหรัฐ (มีจุดในชื่อ เช่น 000660.KS) ย้ายไปแจ้งรอบเอเชีย
-            us = [s for s in syms if "." not in s]
-            asia = [s for s in syms if "." in s]
+            # รอบสหรัฐแจ้งเฉพาะหุ้นสหรัฐ (ข้ามหุ้นที่มีจุดในชื่อ เช่น 005930.KS, 3750.HK)
+            # ส่วนรอบเอเชียไม่แจ้งกรอบหุ้นสหรัฐ เพราะทำให้สับสน
             if mode == "am":
-                boxes.append((g["name"], us))
-            elif mode == "pm" and asia:
-                boxes.append((g["name"] + " (เอเชีย)", asia))
+                boxes.append((g["name"], [s for s in syms if "." not in s]))
         elif tag == "pm" and mode == "pm":
             boxes.append((g["name"], syms))
     return boxes
