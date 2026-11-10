@@ -57,6 +57,14 @@
       ]
     },
     {
+      "name": "หุ้นเอเชียรายตัว",
+      "col": 3,
+      "notify": "pm",
+      "tabletRows": 14,
+      "phoneRows": 14,
+      "symbols": []
+    },
+    {
       "name": "ดัชนีสหรัฐ",
       "page": 2,
       "col": 1,
