@@ -3,6 +3,9 @@
 แอปดูราคาหุ้นส่วนตัว เปิดดูได้ที่ **https://mornavapon.github.io/stock/**
 (ติดตั้งเป็นแอปบนแท็บเล็ตและมือถือด้วย Chrome → ⋮ → **Install app**)
 
+ลิ้งค์ไปยังเอไอที่สร้าง
+https://claude.ai/chat/bde6a04b-ddab-496a-8438-be679642315e
+
 ไฟล์นี้คือคู่มือ เปิดอ่านได้ที่หน้าแรกของ repo นี้เสมอ
 
 <img width="1439" height="809" alt="Screenshot 2026-11-10 102203" src="https://github.com/user-attachments/assets/027e57be-d9d8-4b05-8c99-eb039af30187" />
