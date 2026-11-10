@@ -5,6 +5,8 @@
 
 ไฟล์นี้คือคู่มือ เปิดอ่านได้ที่หน้าแรกของ repo นี้เสมอ
 
+<img width="1439" height="809" alt="Screenshot 2026-11-10 102203" src="https://github.com/user-attachments/assets/027e57be-d9d8-4b05-8c99-eb039af30187" />
+
 ---
 
 ## 0. ภาพรวมแบบสั้น
