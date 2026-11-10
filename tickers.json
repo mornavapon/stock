@@ -62,7 +62,9 @@
       "notify": "pm",
       "tabletRows": 14,
       "phoneRows": 14,
-      "symbols": []
+      "symbols": [
+     "3750.HK", "1810.HK", "^HSCE", "688981.SS", "000660.KS", "005930.KS", "9984.T"
+      ]
     },
     {
       "name": "ดัชนีสหรัฐ",
