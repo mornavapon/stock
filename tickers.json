@@ -53,7 +53,8 @@
       "col": 3,
       "notify": "pm",
       "symbols": [
-        "^HSCE", "000001.SS", "^VNINDEX.VN", "^N225", "^TWII", "^KS11", "^NSEI", "^STI", "^KLSE"
+       "^HSCE", "000001.SS", "^VNINDEX.VN", "^N225", "^TWII", "^KS11", "^NSEI",
+       "^STI", "^KLSE"
       ]
     },
     {
@@ -63,7 +64,7 @@
       "tabletRows": 14,
       "phoneRows": 14,
       "symbols": [
-     "3750.HK", "1810.HK", "0700.HK", "688981.SS", "000660.KS", "005930.KS", "9984.T"
+     "3750.HK", "1810.HK", "0700.HK", "688981.SS", "601318.SS", "688825.SS", "000660.KS", "005930.KS", "9984.T"
       ]
     },
     {
