@@ -10,6 +10,12 @@ https://claude.ai/chat/bde6a04b-ddab-496a-8438-be679642315e
 
 <img width="1439" height="809" alt="Screenshot 2026-11-10 102203" src="https://github.com/user-attachments/assets/027e57be-d9d8-4b05-8c99-eb039af30187" />
 
+<img width="450" height="594" alt="stock หุ้นไทยr พักเที่ยง ขึ้นลงแรง 1" src="https://github.com/user-attachments/assets/45b29789-68ba-4129-8cf0-794e4bf23dbc" />
+
+<img width="450" height="861" alt="stock หุ้นเอเชียขึ้นลงแรง 1" src="https://github.com/user-attachments/assets/a4fc5d6d-f128-4f34-a15e-f2f2c1574474" />
+
+<img width="450" height="737" alt="stock ปิดตลาด หุ้นอเมริกาขึ้นลงแรง 1" src="https://github.com/user-attachments/assets/7833961c-6650-48e9-a9d9-a1bf0463e8ec" />
+
 ---
 
 ## 0. ภาพรวมแบบสั้น
