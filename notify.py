@@ -9,6 +9,7 @@ import json
 import os
 import sys
 import time
+from datetime import datetime, timedelta, timezone
 from urllib.request import Request, urlopen
 
 SITE = "https://mornavapon.github.io/stock/"
@@ -16,6 +17,15 @@ ICON = SITE + "icon-192.png"
 MAX_AGE_H = 14   # ข้อมูลที่ตลาดซื้อขายล่าสุดเก่ากว่านี้ (ชั่วโมง) ถือว่าตลาดปิดวันนี้ ไม่นำมาจัดอันดับ
 NOON_GROUPS = ["หุ้นไทย 1", "หุ้นไทย 2"]  # กรอบที่ใช้ในรอบพักเที่ยง (เอาเฉพาะหุ้นไทย .BK)
 TOP_N = 3        # ขึ้นแรง/ลงแรง กี่ตัวต่อกรอบ (กรอบที่มีหุ้นน้อย จะลดลงให้อัตโนมัติ)
+
+
+THAI_MONTHS = ["มค", "กพ", "มีค", "เมย", "พค", "มิย", "กค", "สค", "กย", "ตค", "พย", "ธค"]
+
+
+def thai_date():
+    """วันที่วันนี้ (เวลาไทย) แบบ 10 พย 69"""
+    d = datetime.now(timezone(timedelta(hours=7)))
+    return "%d %s %02d" % (d.day, THAI_MONTHS[d.month - 1], (d.year + 543) % 100)
 
 
 def load(path):
@@ -118,6 +128,7 @@ def main():
             return
         if mode == "noon":
             message = "ราคา ณ ปิดตลาดภาคเช้า\n\n" + message
+        message = thai_date() + "\n" + message
 
     if dry:
         print(title)
