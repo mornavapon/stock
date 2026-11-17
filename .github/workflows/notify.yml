@@ -1,10 +1,7 @@
 name: notify-movers
 
 on:
-  schedule:
-    - cron: "0 1 * * *"   # 08:00 เวลาไทย -> สรุปตลาดสหรัฐ
-    - cron: "50 5 * * *"  # 12:50 เวลาไทย -> หุ้นไทยหลังปิดภาคเช้า
-    - cron: "30 11 * * *" # 18:30 เวลาไทย -> สรุปตลาดเอเชียและหุ้นไทย
+  # ไม่ตั้งเวลาเองแล้ว: เวลา 08:00 / 12:50 / 18:30 สั่งจาก cron-job.org (เรียก workflow_dispatch)
   workflow_dispatch:
     inputs:
       mode:
@@ -26,11 +23,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Fetch prices
-        if: ${{ github.event_name == 'schedule' || inputs.mode != 'ping' }}
+        if: ${{ inputs.mode != 'ping' }}
         run: python3 fetch_prices.py
       - name: Send notification
         env:
           NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
-          MODE: ${{ github.event_name == 'schedule' && (github.event.schedule == '0 1 * * *' && 'am' || (github.event.schedule == '50 5 * * *' && 'noon' || 'pm')) || inputs.mode }}
+          MODE: ${{ inputs.mode }}
           FORCE: ${{ inputs.force }}
         run: python3 notify.py
